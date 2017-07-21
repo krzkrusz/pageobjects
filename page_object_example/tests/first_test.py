@@ -1,11 +1,13 @@
+from random import randint
+
+from selenium.webdriver import Ie
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+from page_object_example.customer_registered_successfully_page import CustomerRegisteredSuccessFullyPage
+from page_object_example.delete_customer_page import DeleteCustomerPage
 from page_object_example.login_page import LoginPage
 from page_object_example.main_page import MainPage
-from page_object_example.tests.new_customer_page import NewCustomerPage
-from page_object_example.tests.customer_registered_successfully_page import CustomerRegisteredSuccessFullyPage
-from delete_customer_page import DeleteCustomerPage
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver import Ie
-from random import randint
+from page_object_example.new_customer_page import NewCustomerPage
 
 driver = None
 # to be filled in
@@ -48,11 +50,17 @@ def test_new_customer():
     global new_customer_id
     new_customer_id = customer_registered_page.get_customer_id()
 
-def test_delete_customer(customer_id=new_customer_id):
+def test_delete_customer_succesfully(customer_id=new_customer_id):
     delete_page = DeleteCustomerPage(driver)
     delete_page.open()
-    delete_page.fill_form(customer_id=new_customer_id)
+    alert_text = delete_page.fill_form(customer_id=new_customer_id)
+    assert alert_text == 'Customer deleted Successfully'
 
+def test_delete_customer_not_successfully(customer_id=new_customer_id):
+    delete_page = DeleteCustomerPage(driver)
+    delete_page.open()
+    alert_text = delete_page.fill_form(customer_id=new_customer_id)
+    assert alert_text == 'Customer does not exist!!'
 
 def teardown_module(module):
     global driver
