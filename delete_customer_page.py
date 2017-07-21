@@ -24,7 +24,7 @@ class DeleteCustomerPage(BasePage):
             self.submit_button.click()
             alert1 = self.driver.switch_to_alert()
             alert1.accept()
-            
+
         elif click_reset:
             self.reset_button.click()
 
